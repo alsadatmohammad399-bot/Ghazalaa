@@ -24,6 +24,12 @@ jobs:
         with:
           gradle-version: '9.3.1'
 
+      - name: Accept Android SDK licenses
+        run: |
+          if [ -d "$ANDROID_HOME/cmdline-tools/latest/bin" ]; then
+            yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
+          fi
+
       - name: Ensure CI debug keystore exists
         run: |
           if [ ! -f debug.keystore ]; then
@@ -34,7 +40,7 @@ jobs:
           fi
 
       - name: Build Debug APK
-        run: gradle :app:assembleDebug --no-daemon
+        run: gradle :app:assembleDebug --no-daemon -Pksp.incremental=false
 
       - name: Upload GHAZALO APK
         uses: actions/upload-artifact@v4

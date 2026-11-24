@@ -1,7 +1,6 @@
 package com.example.data
 
 import android.content.Context
-import com.example.R
 import com.example.model.InventoryItem
 import com.example.model.MenuItem
 import com.example.model.RestaurantOrder
@@ -29,14 +28,18 @@ class GhazaloRepository(
     private val auth: FirebaseAuth = Firebase.auth
 ) {
     constructor(context: Context) : this(
-        FirebaseFirestore.getInstance(
-            context.applicationContext.getString(R.string.firestore_database_id)
-        )
+        FirebaseFirestore.getInstance(resolveDatabaseId(context.applicationContext))
     )
 
     companion object {
         const val ADMIN_EMAIL = "alsadatmohammad399@gmail.com"
         const val SUPPORT_PHONE = "01015861991"
+        private const val FALLBACK_DATABASE_ID = "ai-studio-android-ghazalo-f0543066-5b68-42c7-a214-15d665107a92"
+
+        fun resolveDatabaseId(context: Context): String {
+            val resId = context.resources.getIdentifier("firestore_database_id", "string", context.packageName)
+            return if (resId != 0) context.getString(resId) else FALLBACK_DATABASE_ID
+        }
     }
 
     private fun requireUserId(): String =

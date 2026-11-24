@@ -89,6 +89,7 @@ import com.example.ui.screens.StorefrontScreen
 import com.example.ui.theme.GhazaloTheme
 import com.example.viewmodel.GhazaloViewModel
 import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
@@ -176,6 +177,20 @@ private fun GhazaloRoot(
     onToggleLanguage: () -> Unit,
     onToggleDark: () -> Unit
 ) {
+    val context = LocalContext.current
+    val hasFirebase = remember(context) { FirebaseApp.getApps(context).isNotEmpty() }
+    if (!hasFirebase) {
+        AuthScreen(
+            language = language,
+            isDark = isDark,
+            pendingPhone = pendingPhone,
+            onPhoneChange = onPendingPhoneChange,
+            onToggleLanguage = onToggleLanguage,
+            onToggleDark = onToggleDark,
+            onAuthSuccess = {}
+        )
+        return
+    }
     val auth = Firebase.auth
     val currentUser by auth.authStateFlow().collectAsStateWithLifecycle(initialValue = auth.currentUser)
     val user = currentUser
@@ -199,7 +214,12 @@ private fun GhazaloRoot(
                         val app = checkNotNull(this[APPLICATION_KEY]) {
                             "APPLICATION_KEY missing from CreationExtras"
                         }
-                        val databaseId = app.getString(R.string.firestore_database_id)
+                        val dbResId = app.resources.getIdentifier("firestore_database_id", "string", app.packageName)
+                        val databaseId = if (dbResId != 0) {
+                            app.getString(dbResId)
+                        } else {
+                            "ai-studio-android-ghazalo-f0543066-5b68-42c7-a214-15d665107a92"
+                        }
                         val db = FirebaseFirestore.getInstance(databaseId)
                         GhazaloViewModel(
                             repository = GhazaloRepository(db),

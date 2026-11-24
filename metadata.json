@@ -1,0 +1,6 @@
+{
+  "name": "GHAZALO",
+  "description": "GHAZALO multi-template restaurant digital menu, online ordering, live cashier POS with sound alerts, AI menu photo extractor & assistant, inventory & sales analytics, staff RBAC, and subscription admin portal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

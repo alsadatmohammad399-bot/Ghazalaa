@@ -1,0 +1,161 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private authenticated user account and phone verification metadata.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "phoneVerified": { "type": "boolean" },
+        "preferredLanguage": { "type": "string", "enum": ["ar", "en"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "displayName", "email", "preferredLanguage", "createdAt", "updatedAt"]
+    },
+    "RestaurantProfile": {
+      "title": "RestaurantProfile",
+      "description": "Restaurant tenant profile, storefront template, subscription state, and web/API sync settings.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "ownerEmail": { "type": "string" },
+        "nameAr": { "type": "string" },
+        "nameEn": { "type": "string" },
+        "slug": { "type": "string" },
+        "phone": { "type": "string" },
+        "phoneVerified": { "type": "boolean" },
+        "templateId": { "type": "string", "enum": ["oriental_royal", "modern_bistro", "express_grid", "luxury_gold"] },
+        "currency": { "type": "string", "enum": ["EGP", "SAR", "USD"] },
+        "subscriptionStatus": { "type": "string", "enum": ["TRIAL", "PENDING_PAYMENT", "ACTIVE", "EXPIRED"] },
+        "planTier": { "type": "string", "enum": ["FREE_TRIAL", "STARTER", "PRO", "ENTERPRISE"] },
+        "trialDaysRemaining": { "type": "integer" },
+        "paymentReference": { "type": "string" },
+        "vercelStorefrontUrl": { "type": "string" },
+        "githubRepoUrl": { "type": "string" },
+        "webhookUrl": { "type": "string" },
+        "alertEmail": { "type": "string" },
+        "autoBackupEnabled": { "type": "boolean" },
+        "soundAlertEnabled": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "ownerEmail", "nameAr", "nameEn", "slug", "templateId", "currency", "subscriptionStatus", "planTier", "trialDaysRemaining", "autoBackupEnabled", "soundAlertEnabled", "createdAt", "updatedAt"]
+    },
+    "MenuItem": {
+      "title": "MenuItem",
+      "description": "Restaurant menu dish with bilingual fields, category, price, and extracted ingredients.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "restaurantId": { "type": "string" },
+        "nameAr": { "type": "string" },
+        "nameEn": { "type": "string" },
+        "categoryAr": { "type": "string" },
+        "categoryEn": { "type": "string" },
+        "descriptionAr": { "type": "string" },
+        "descriptionEn": { "type": "string" },
+        "price": { "type": "number" },
+        "ingredients": { "type": "array" },
+        "imageKey": { "type": "string" },
+        "available": { "type": "boolean" },
+        "featured": { "type": "boolean" },
+        "prepMinutes": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "restaurantId", "nameAr", "nameEn", "categoryAr", "categoryEn", "price", "ingredients", "imageKey", "available", "featured", "prepMinutes", "createdAt", "updatedAt"]
+    },
+    "RestaurantOrder": {
+      "title": "RestaurantOrder",
+      "description": "Customer online or POS order routed to the restaurant cashier display.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "restaurantId": { "type": "string" },
+        "orderNumber": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "orderType": { "type": "string", "enum": ["DELIVERY", "PICKUP", "DINE_IN"] },
+        "paymentMethod": { "type": "string", "enum": ["CASH", "CARD", "INSTAPAY", "VODAFONE_CASH"] },
+        "status": { "type": "string", "enum": ["NEW", "PREPARING", "READY", "COMPLETED", "CANCELLED"] },
+        "itemsSummary": { "type": "string" },
+        "itemCount": { "type": "integer" },
+        "totalAmount": { "type": "number" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "restaurantId", "orderNumber", "customerName", "orderType", "paymentMethod", "status", "itemsSummary", "itemCount", "totalAmount", "createdAt", "updatedAt"]
+    },
+    "InventoryItem": {
+      "title": "InventoryItem",
+      "description": "Kitchen stock item with low-stock threshold alerts.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "restaurantId": { "type": "string" },
+        "nameAr": { "type": "string" },
+        "nameEn": { "type": "string" },
+        "unit": { "type": "string" },
+        "currentStock": { "type": "number" },
+        "minThreshold": { "type": "number" },
+        "unitCost": { "type": "number" },
+        "supplierName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "restaurantId", "nameAr", "nameEn", "unit", "currentStock", "minThreshold", "unitCost", "createdAt", "updatedAt"]
+    },
+    "StaffMember": {
+      "title": "StaffMember",
+      "description": "Restaurant staff member with granular module permissions.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "restaurantId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "role": { "type": "string", "enum": ["OWNER", "MANAGER", "CASHIER", "KITCHEN"] },
+        "active": { "type": "boolean" },
+        "canEditMenu": { "type": "boolean" },
+        "canAccessCashier": { "type": "boolean" },
+        "canViewReports": { "type": "boolean" },
+        "canManageInventory": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "restaurantId", "fullName", "role", "active", "canEditMenu", "canAccessCashier", "canViewReports", "canManageInventory", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user account documents."
+    },
+    "/restaurants/{restaurantId}": {
+      "schema": { "$ref": "#/entities/RestaurantProfile" },
+      "description": "Restaurant profiles and subscription states."
+    },
+    "/restaurants/{restaurantId}/menu_items/{itemId}": {
+      "schema": { "$ref": "#/entities/MenuItem" },
+      "description": "Menu dishes belonging to a restaurant."
+    },
+    "/restaurants/{restaurantId}/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/RestaurantOrder" },
+      "description": "Customer orders routed to restaurant cashier."
+    },
+    "/restaurants/{restaurantId}/inventory/{invId}": {
+      "schema": { "$ref": "#/entities/InventoryItem" },
+      "description": "Kitchen inventory items with low-stock thresholds."
+    },
+    "/restaurants/{restaurantId}/staff/{staffId}": {
+      "schema": { "$ref": "#/entities/StaffMember" },
+      "description": "Staff members and RBAC permission flags."
+    }
+  }
+}
